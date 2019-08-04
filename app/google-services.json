@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "106500325675",
+    "firebase_url": "https://checkweather-9d7f3.firebaseio.com",
+    "project_id": "checkweather-9d7f3",
+    "storage_bucket": "checkweather-9d7f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106500325675:android:32a076299d07f95d",
+        "android_client_info": {
+          "package_name": "com.junmo.weather_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "106500325675-sd4h5jt3dm2hm3uhrb833ap666a3226b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.junmo.weather_application",
+            "certificate_hash": "95bef8cd5aa0a2887fd89ffed889bb3ceee62624"
+          }
+        },
+        {
+          "client_id": "106500325675-im9gstsh828ojs4f8oj6ehaeadeklhga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyWXKUd8kA_x4r7yPV3RmdpQNNqSQpDVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "106500325675-im9gstsh828ojs4f8oj6ehaeadeklhga.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
