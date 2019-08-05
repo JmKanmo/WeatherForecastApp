@@ -25,7 +25,7 @@ class AccountSettingActivity : AppCompatActivity() {
         }
 
         account_setting_delete.setOnClickListener {
-            deleteAccount()
+            showDeleteDialog()
         }
     }
 
@@ -39,15 +39,27 @@ class AccountSettingActivity : AppCompatActivity() {
     }
 
     private fun deleteAccount() {
-        account_setting_logout.setOnClickListener {
-            AuthUI.getInstance()
-                .delete(this)
-                .addOnCompleteListener {
-                    moveToMainActivity()
-                    Toast.makeText(this, "계정이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                }
-        }
+        AuthUI.getInstance()
+            .delete(this)
+            .addOnCompleteListener {
+                moveToMainActivity()
+                Toast.makeText(this, "계정이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+            }
     }
+
+    private fun showDeleteDialog() {
+        AccountDeleteDialog().apply {
+            addAccountDeleteDiaglogInterface(object : AccountDeleteDialog.AccountDeleteDiaglogInterface {
+                override fun delete() {
+                    deleteAccount()
+                }
+
+                override fun cancle() {
+                }
+            })
+        }.show(supportFragmentManager,"")
+    }
+
 
     private fun moveToMainActivity() {
         finish()
