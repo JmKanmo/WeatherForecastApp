@@ -33,10 +33,18 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_open_weather)
 
+        getLocationInfo()
+
         setting.setOnClickListener {
             startActivity(Intent(this, AccountSettingActivity::class.java))
-//            requestCurrentWeather()
-            getLocationInfo()
+        }
+    }
+
+    private fun drawCurrentWeather(currentWeather: TotalWeather) {
+        with(currentWeather) {
+            this.main?.temp?.let { current_now.text = it.toString() }
+            this.main?.temp_max?.let { current_max.text = it.toString() }
+            this.main?.temp_min?.let { current_min.text = it.toString() }
         }
     }
 
@@ -89,7 +97,9 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
                 override fun onResponse(call: Call<TotalWeather>, response: Response<TotalWeather>) {
                     if (response.isSuccessful) {
                         val totalWeather = response.body()
-                        Log.d("TAG", "total weather:" + totalWeather?.main?.temp)
+                        totalWeather?.let {
+                            drawCurrentWeather(it)
+                        }
                     }
                 }
             })
@@ -125,22 +135,6 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
     }
 
     override fun onProviderDisabled(provider: String?) {
-
-    }
-
-    private fun requestCurrentWeather() {
-        (application as WeatherApplication)
-            .requestService()
-            ?.getWeatherInfoOfLocation("London", "8f542c094a6cb47cb3b1c75fd007db2a")
-            ?.enqueue(object : Callback<TotalWeather> {
-                override fun onFailure(call: Call<TotalWeather>, t: Throwable) {
-                }
-
-                override fun onResponse(call: Call<TotalWeather>, response: Response<TotalWeather>) {
-                    var totalWeather = response.body()
-                    Log.d("TAG", totalWeather?.main?.temp_max.toString())
-                }
-            })
 
     }
 }
