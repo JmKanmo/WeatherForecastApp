@@ -15,7 +15,9 @@
             android:theme="@style/AppTheme">
         <activity android:name=".AccountSettingActivity">
         </activity>
-        <activity android:name=".OpenWeatherActivity">
+        <activity
+                android:name=".OpenWeatherActivity"
+                android:screenOrientation="portrait">
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>

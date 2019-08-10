@@ -7,12 +7,14 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_open_weather.*
 import org.json.JSONObject
@@ -28,6 +30,7 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
     private val PERMISSION_REQUEST_CODE = 2000
     private val APP_ID = "8f542c094a6cb47cb3b1c75fd007db2a"
     private val units = "metric"
+    private val LANGUAGE = "kr"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +45,15 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
 
     private fun drawCurrentWeather(currentWeather: TotalWeather) {
         with(currentWeather) {
+            this?.weatherList?.getOrNull(0)?.let {
+                it.icon?.let {
+
+                    val glide = Glide.with(applicationContext)
+                    glide.load(Uri.parse("https://openweathermap.org/img/w/" + it + ".png")).into(current_icon)
+                }
+                it.main?.let { current_main.text = it }
+                it.description?.let { current_description.text = it }
+            }
             this.main?.temp?.let { current_now.text = it.toString() }
             this.main?.temp_max?.let { current_max.text = it.toString() }
             this.main?.temp_min?.let { current_min.text = it.toString() }
@@ -62,7 +74,7 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
             )
         } else {
             val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            val location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             if (location != null) {
                 val latitude = location.latitude
                 val longitude = location.longitude
@@ -71,8 +83,8 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
                 requestWeatherInfoOfLocation(latitude = latitude, longiude = longitude)
             } else {
                 locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    3000L,
+                    LocationManager.GPS_PROVIDER,
+                    0L,
                     0f,
                     this
                 )
@@ -88,10 +100,10 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
                 latitude = latitude,
                 longitude = longiude,
                 appID = APP_ID,
-                units = units
+                units = units,
+                language = LANGUAGE
             )?.enqueue(object : Callback<TotalWeather> {
                 override fun onFailure(call: Call<TotalWeather>, t: Throwable) {
-
                 }
 
                 override fun onResponse(call: Call<TotalWeather>, response: Response<TotalWeather>) {
