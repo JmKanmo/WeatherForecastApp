@@ -51,7 +51,7 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
     override fun onBackPressed() {
         backPressHolder.onBackPressed()
     }
-    
+
     private fun drawCurrentWeather(currentWeather: TotalWeather) {
         with(currentWeather) {
             this?.weatherList?.getOrNull(0)?.let {
