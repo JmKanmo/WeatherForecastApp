@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_open_weather.*
@@ -31,18 +32,26 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
     private val APP_ID = "8f542c094a6cb47cb3b1c75fd007db2a"
     private val units = "metric"
     private val LANGUAGE = "kr"
+    private lateinit var backPressHolder: OnBackPressHolder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_open_weather)
 
+        backPressHolder = OnBackPressHolder()
         getLocationInfo()
+
+        weatherActivity_back.setOnClickListener { finishAffinity() }
 
         setting.setOnClickListener {
             startActivity(Intent(this, AccountSettingActivity::class.java))
         }
     }
 
+    override fun onBackPressed() {
+        backPressHolder.onBackPressed()
+    }
+    
     private fun drawCurrentWeather(currentWeather: TotalWeather) {
         with(currentWeather) {
             this?.weatherList?.getOrNull(0)?.let {
@@ -54,9 +63,10 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
                 it.main?.let { current_main.text = it }
                 it.description?.let { current_description.text = it }
             }
-            this.main?.temp?.let { current_now.text = it.toString() }
-            this.main?.temp_max?.let { current_max.text = it.toString() }
-            this.main?.temp_min?.let { current_min.text = it.toString() }
+
+            this.main?.temp?.let { current_now.text = String.format("%.1f", it) }
+            this.main?.temp_max?.let { current_max.text = String.format("%.1f", it) }
+            this.main?.temp_min?.let { current_min.text = String.format("%.1f", it) }
         }
     }
 
@@ -148,5 +158,24 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
 
     override fun onProviderDisabled(provider: String?) {
 
+    }
+
+    inner class OnBackPressHolder() {
+        private var backPressHolder: Long = 0
+
+        fun onBackPressed() {
+            if (System.currentTimeMillis() > backPressHolder + 2000) {
+                backPressHolder = System.currentTimeMillis()
+                showBackToast()
+                return
+            }
+            if (System.currentTimeMillis() <= backPressHolder + 2000) {
+                finishAffinity()
+            }
+        }
+
+        fun showBackToast() {
+            Toast.makeText(applicationContext, "한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 }
