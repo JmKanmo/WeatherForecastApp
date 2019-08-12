@@ -1,6 +1,7 @@
 # WeatherForecastApp
 
 개발환경: Android studio 
+
 개발언어: Kotlin 
 
 기능: OpenWeatherMap Open API와 안드로이드 Retrofit 라이브러리를 이용해 얻은 현재 날씨정보를 화면에 보여준다.
