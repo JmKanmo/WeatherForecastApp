@@ -47,6 +47,7 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
         weatherActivity_back.setOnClickListener { finishAffinity() }
 
         setting.setOnClickListener {
+            finish()
             startActivity(Intent(this, AccountSettingActivity::class.java))
         }
     }
@@ -94,8 +95,6 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
             if (location != null) {
                 val latitude = location.latitude
                 val longitude = location.longitude
-//                Log.d("TAG", "1_lattitude:" + latitude.toString())
-//                Log.d("TAG", "1_longitude:" + longitude.toString())
                 requestWeatherInfoOfLocation(latitude = latitude, longiude = longitude)
             } else {
                 locationManager.requestLocationUpdates(
@@ -149,8 +148,7 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
     override fun onLocationChanged(location: Location?) {
         val latitude = location?.latitude
         val longitude = location?.longitude
-//        Log.d("TAG", "2_latitude:" + latitude.toString())
-//        Log.d("TAG", "2_longitude:" + longitude.toString())
+
         if (latitude != null && longitude != null) requestWeatherInfoOfLocation(
             latitude = latitude,
             longiude = longitude
