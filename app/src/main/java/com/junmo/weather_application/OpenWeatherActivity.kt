@@ -8,13 +8,16 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.ViewAnimator
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_open_weather.*
@@ -64,9 +67,12 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
                 it.description?.let { current_description.text = it }
             }
 
-            this.main?.temp?.let { current_now.text = String.format("%.1f", it) }
-            this.main?.temp_max?.let { current_max.text = String.format("%.1f", it) }
-            this.main?.temp_min?.let { current_min.text = String.format("%.1f", it) }
+            this.main?.temp?.let { current_now.text = String.format("%.1f", it) + "℃" }
+            this.main?.temp_max?.let { current_max.text = String.format("%.1f", it) + "℃" }
+            this.main?.temp_min?.let { current_min.text = String.format("%.1f", it) + "℃" }
+
+            loading_view.visibility = ViewGroup.GONE
+            weather_view.visibility = ViewGroup.VISIBLE
         }
     }
 
@@ -114,6 +120,7 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
                 language = LANGUAGE
             )?.enqueue(object : Callback<TotalWeather> {
                 override fun onFailure(call: Call<TotalWeather>, t: Throwable) {
+                    loading_text.text = "로딩실패: 네트워크상태를 확인해주세요."
                 }
 
                 override fun onResponse(call: Call<TotalWeather>, response: Response<TotalWeather>) {
@@ -122,6 +129,8 @@ class OpenWeatherActivity : AppCompatActivity(), LocationListener {
                         totalWeather?.let {
                             drawCurrentWeather(it)
                         }
+                    } else {
+                        loading_text.text = "로딩실패: 데이터전송오류"
                     }
                 }
             })
