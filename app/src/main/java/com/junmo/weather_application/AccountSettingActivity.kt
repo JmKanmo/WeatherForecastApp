@@ -17,7 +17,8 @@ class AccountSettingActivity : AppCompatActivity() {
 
     private fun setupListener() {
         account_setting_back.setOnClickListener {
-            onBackPressed()
+            finish()
+            startActivity(Intent(this, OpenWeatherActivity::class.java))
         }
 
         account_setting_logout.setOnClickListener {
